@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A working personal finance tracker. Add income and expenses, set budgets, track goals, and see real calculations.">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>Pennywise — Your money workspace</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5.5A2.5 2.5 0 0 1 3 16.5z"/><path d="M3 8h14"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 20v-6M11 20V7M16 20v-9M21 20V4"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 17v3h16v-3"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14-5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 5l2-2"/><path d="M20 20v-4h-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <header class="app-header" id="top">
+    <div class="container nav-inner">
+      <a class="brand" href="#main" aria-label="Pennywise home">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-wallet"></use></svg></span>
+        <span>penny<span class="brand-accent">wise</span></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="app-nav" aria-label="Open menu">
+        <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu"></use></svg>
+        <svg class="icon icon-close" aria-hidden="true"><use href="#i-close"></use></svg>
+      </button>
+      <nav class="app-nav" id="app-nav" aria-label="App sections">
+        <a href="#overview">Overview</a>
+        <a href="#transactions">Transactions</a>
+        <a href="#budgets">Budgets</a>
+        <a href="#goals">Goals</a>
+        <a class="btn btn-primary btn-sm" href="#add-entry">+ Add entry</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="app-hero" aria-labelledby="hero-title">
+      <div class="container hero-row">
+        <div>
+          <span class="eyebrow">Live finance workspace</span>
+          <h1 id="hero-title">Know where your money goes.</h1>
+          <p>Add your income and purchases below. Everything is calculated instantly and saved in this browser.</p>
+        </div>
+        <div class="save-badge"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Saved locally</strong><small>No account, no server</small></span></div>
+      </div>
+    </section>
+
+    <div class="container app-grid">
+      <!-- Add entry -->
+      <section class="panel panel-add" id="add-entry" aria-labelledby="add-title">
+        <div class="panel-head">
+          <div><h2 id="add-title">Add money movement</h2><p>Income or expense, with a category and date.</p></div>
+          <span class="pill pill-demo" id="entry-mode-badge">New entry</span>
+        </div>
+        <form id="entry-form" novalidate>
+          <div class="type-toggle" role="group" aria-label="Entry type">
+            <button class="type-btn is-active" type="button" data-type="expense" aria-pressed="true">Expense</button>
+            <button class="type-btn" type="button" data-type="income" aria-pressed="false">Income</button>
+          </div>
+          <div class="form-grid">
+            <label class="field"><span>Description</span><input id="entry-title" name="title" type="text" maxlength="70" placeholder="e.g. Weekly groceries" required></label>
+            <label class="field"><span>Amount</span><input id="entry-amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></label>
+            <label class="field"><span>Category</span><select id="entry-category" name="category"></select></label>
+            <label class="field"><span>Date</span><input id="entry-date" name="date" type="date" required></label>
+          </div>
+          <p class="form-error" id="entry-error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="entry-submit" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg> Add expense</button>
+            <button class="btn btn-ghost" id="entry-cancel" type="button" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Overview -->
+      <section class="panel panel-overview" id="overview" aria-labelledby="overview-title">
+        <div class="panel-head">
+          <div><h2 id="overview-title">Overview</h2><p id="overview-month-label">Summary for this month</p></div>
+          <label class="month-field"><span>Viewing</span><input id="month-filter" type="month"></label>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-label">Overall balance</span><strong id="stat-balance">$0.00</strong><small>All dates combined</small></article>
+          <article class="stat-card"><span class="stat-label">Income this month</span><strong id="stat-income" class="positive">$0.00</strong><small id="stat-income-count">0 entries</small></article>
+          <article class="stat-card"><span class="stat-label">Spending this month</span><strong id="stat-expense" class="negative">$0.00</strong><small id="stat-expense-count">0 entries</small></article>
+          <article class="stat-card"><span class="stat-label">Net this month</span><strong id="stat-net">$0.00</strong><small>Income minus spending</small></article>
+        </div>
+        <div class="chart-block">
+          <div class="chart-head"><strong>Where it went</strong><span id="chart-total">No expenses yet</span></div>
+          <div class="chart-body">
+            <div class="donut" id="category-donut" role="img" aria-label="Category breakdown"><span id="donut-label">—</span></div>
+            <ul class="chart-legend" id="category-legend"><li class="empty-note">Add an expense to see your categories.</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Budgets -->
+      <section class="panel" id="budgets" aria-labelledby="budgets-title">
+        <div class="panel-head"><div><h2 id="budgets-title">Monthly budgets</h2><p>Limits for the month you are viewing.</p></div><span class="panel-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span></div>
+        <form class="inline-form" id="budget-form" novalidate>
+          <label class="field"><span>Category</span><select id="budget-category"></select></label>
+          <label class="field"><span>Monthly limit</span><input id="budget-amount" type="number" min="0.01" step="0.01" placeholder="e.g. 400" required></label>
+          <button class="btn btn-primary" type="submit">Set budget</button>
+        </form>
+        <div class="budget-list" id="budget-list"></div>
+      </section>
+
+      <!-- Goals -->
+      <section class="panel" id="goals" aria-labelledby="goals-title">
+        <div class="panel-head"><div><h2 id="goals-title">Savings goals</h2><p>Put money aside and watch the target get closer.</p></div><span class="panel-icon"><svg class="icon" aria-hidden="true"><use href="#i-target"></use></svg></span></div>
+        <form class="inline-form" id="goal-form" novalidate>
+          <label class="field"><span>Goal name</span><input id="goal-name" type="text" maxlength="50" placeholder="e.g. Emergency fund" required></label>
+          <label class="field"><span>Target</span><input id="goal-target" type="number" min="1" step="0.01" placeholder="e.g. 3000" required></label>
+          <button class="btn btn-primary" type="submit">Add goal</button>
+        </form>
+        <div class="goal-list" id="goal-list"></div>
+      </section>
+
+      <!-- Transactions -->
+      <section class="panel panel-wide" id="transactions" aria-labelledby="transactions-title">
+        <div class="panel-head"><div><h2 id="transactions-title">Transactions</h2><p id="transaction-count">0 entries in view</p></div></div>
+        <div class="filters">
+          <label class="field search-field"><span>Search</span><input id="search-input" type="search" placeholder="Find by description or category"></label>
+          <label class="field"><span>Type</span><select id="filter-type"><option value="all">All</option><option value="expense">Expenses</option><option value="income">Income</option></select></label>
+          <label class="field"><span>Category</span><select id="filter-category"><option value="all">All categories</option></select></label>
+        </div>
+        <div class="transaction-table" id="transaction-list"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="app-footer"><div class="container"><span>Pennywise · working front-end demo</span><span>Calculations use the entries you add — no sample figures unless you load them.</span></div></footer>
+  <div class="toast" id="app-status" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

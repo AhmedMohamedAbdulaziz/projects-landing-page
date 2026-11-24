@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A working study planner. Add subjects and tasks with study time, build a weekly schedule, track progress, and use a real focus timer.">
+  <meta name="theme-color" content="#f6f5fc">
+  <title>Studyflow — Your study workspace</title>
+  <script>
+    try {
+      var savedTheme = localStorage.getItem("studyflow-theme");
+      var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : (prefersDark ? "dark" : "light");
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 16 9 5 9-5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 17v3h16v-3"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14-5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 5l2-2"/><path d="M20 20v-4h-4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5v14M15 5v14"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <header class="app-header" id="top">
+    <div class="container nav-inner">
+      <a class="brand" href="#main" aria-label="Studyflow home">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-layers"></use></svg></span>
+        <span>study<span class="brand-accent">flow</span></span>
+      </a>
+      <nav class="app-nav" id="app-nav" aria-label="App sections">
+        <a href="#overview">Overview</a>
+        <a href="#schedule">Weekly plan</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#focus">Focus timer</a>
+        <a class="btn btn-primary btn-sm" href="#add-task">+ Add task</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+        </button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="app-nav" aria-label="Open menu">
+          <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu"></use></svg>
+          <svg class="icon icon-close" aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="app-hero" aria-labelledby="hero-title">
+      <div class="container hero-row">
+        <div>
+          <span class="eyebrow">Live study workspace</span>
+          <h1 id="hero-title">Plan your study time. See it happen.</h1>
+          <p>Add subjects, tasks and the minutes you plan to study. Build your week, tick off sessions, and use the focus timer.</p>
+        </div>
+        <div class="save-badge"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Saved locally</strong><small>Theme and data stay in this browser</small></span></div>
+      </div>
+    </section>
+
+    <div class="container app-grid">
+      <!-- Add task -->
+      <section class="panel panel-add" id="add-task" aria-labelledby="add-task-title">
+        <div class="panel-head">
+          <div><h2 id="add-task-title">Add a study task</h2><p>What are you studying, and for how long?</p></div>
+          <span class="pill pill-demo" id="task-mode-badge">New task</span>
+        </div>
+        <form id="task-form" novalidate>
+          <label class="field"><span>Task</span><input id="task-title" type="text" maxlength="80" placeholder="e.g. Biology — cell structure" required></label>
+          <div class="form-grid">
+            <label class="field"><span>Subject</span><select id="task-subject"></select></label>
+            <label class="field"><span>Planned minutes</span><input id="task-minutes" type="number" min="1" max="600" step="5" value="25" required></label>
+            <label class="field"><span>Date</span><input id="task-date" type="date" required></label>
+            <label class="field"><span>Priority</span><select id="task-priority"><option value="normal">Normal</option><option value="high">High</option><option value="low">Low</option></select></label>
+          </div>
+          <p class="form-error" id="task-error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="task-submit" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg> Add task</button>
+            <button class="btn btn-ghost" id="task-cancel" type="button" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Subjects -->
+      <section class="panel" id="subjects" aria-labelledby="subjects-title">
+        <div class="panel-head"><div><h2 id="subjects-title">Subjects</h2><p>Organize tasks by what you are learning.</p></div><span class="panel-icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"></use></svg></span></div>
+        <form class="inline-form" id="subject-form" novalidate>
+          <label class="field"><span>Subject name</span><input id="subject-name" type="text" maxlength="40" placeholder="e.g. Maths" required></label>
+          <label class="field"><span>Colour</span><select id="subject-color"></select></label>
+          <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+        <div class="subject-list" id="subject-list"></div>
+      </section>
+
+      <!-- Overview -->
+      <section class="panel panel-wide" id="overview" aria-labelledby="overview-title">
+        <div class="panel-head">
+          <div><h2 id="overview-title">This week</h2><p id="overview-week-label">Your planned and completed study time.</p></div>
+          <label class="week-field"><span>Week starting</span><input id="week-start" type="date"></label>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-label">Planned time</span><strong id="stat-planned">0m</strong><small id="stat-task-count">0 tasks</small></article>
+          <article class="stat-card"><span class="stat-label">Completed time</span><strong id="stat-completed" class="positive">0m</strong><small>Sessions you logged</small></article>
+          <article class="stat-card"><span class="stat-label">Tasks done</span><strong id="stat-done">0 / 0</strong><small>In this week</small></article>
+          <article class="stat-card"><span class="stat-label">Remaining</span><strong id="stat-remaining">0m</strong><small>Planned minus completed</small></article>
+        </div>
+      </section>
+
+      <!-- Weekly schedule -->
+      <section class="panel panel-wide" id="schedule" aria-labelledby="schedule-title">
+        <div class="panel-head"><div><h2 id="schedule-title">Weekly schedule</h2><p>Tasks placed on the date you chose.</p></div></div>
+        <div class="day-tabs" id="day-tabs" role="tablist" aria-label="Choose a day"></div>
+        <div class="day-summary" id="day-summary"></div>
+        <div class="day-tasks" id="day-tasks"></div>
+      </section>
+
+      <!-- Progress -->
+      <section class="panel" id="progress" aria-labelledby="progress-title">
+        <div class="panel-head"><div><h2 id="progress-title">Subject progress</h2><p>Weekly minutes completed vs planned.</p></div></div>
+        <div class="progress-list" id="progress-list"></div>
+      </section>
+
+      <!-- Focus timer -->
+      <section class="panel" id="focus" aria-labelledby="focus-title">
+        <div class="panel-head"><div><h2 id="focus-title">Focus timer</h2><p>Work in a block, then log the minutes to the task.</p></div><span class="panel-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span></div>
+        <label class="field"><span>Study task</span><select id="timer-task"><option value="">Choose a task…</option></select></label>
+        <div class="timer-row">
+          <label class="field"><span>Minutes</span><input id="timer-minutes" type="number" min="1" max="180" value="25"></label>
+          <div class="timer-display" id="timer-display" role="timer" aria-live="off">25:00</div>
+        </div>
+        <div class="timer-actions">
+          <button class="btn btn-primary" id="timer-start" type="button"><svg class="icon" aria-hidden="true"><use href="#i-play"></use></svg> Start</button>
+          <button class="btn btn-outline" id="timer-reset" type="button"><svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg> Reset</button>
+        </div>
+        <p class="timer-note">When the timer finishes, the minutes are added to the selected task automatically.</p>
+      </section>
+
+      <!-- Tasks -->
+      <section class="panel panel-wide" id="tasks" aria-labelledby="tasks-title">
+        <div class="panel-head"><div><h2 id="tasks-title">All tasks</h2><p id="task-count">0 tasks</p></div></div>
+        <div class="filters">
+          <label class="field search-field"><span>Search</span><input id="task-search" type="search" placeholder="Find a task"></label>
+          <label class="field"><span>Subject</span><select id="task-filter-subject"><option value="all">All subjects</option></select></label>
+          <label class="field"><span>Status</span><select id="task-filter-status"><option value="all">All</option><option value="todo">To do</option><option value="done">Done</option></select></label>
+        </div>
+        <div class="task-table" id="task-list"></div>
+      </section>
+
+      
+    </div>
+  </main>
+
+  <footer class="app-footer"><div class="container"><span>Studyflow · working front-end demo</span><span>Your plan and progress are calculated from the tasks you add.</span></div></footer>
+  <div class="toast" id="app-status" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
